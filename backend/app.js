@@ -9,6 +9,13 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 
 const dbService = require('./dbServices');
+
+//insert
+app.post('/insert', (request, response) => {
+    console.log(request.body);
+})
+
+
 //READ
 app.get('/getAll', (request, response) => {
 
