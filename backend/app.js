@@ -12,8 +12,15 @@ const dbService = require('./dbServices');
 
 //insert
 app.post('/insert', (request, response) => {
-    console.log(request.body);
-})
+    const { name } = request.body;
+    const db = dbService.getDbServiceInstance();
+
+    const result = db.insertNewName(name);
+
+    result
+        .then(data => response.json({ data: data }))
+        .catch(err => console.log(err));
+});
 
 
 //READ
@@ -25,7 +32,21 @@ app.get('/getAll', (request, response) => {
     result
         .then(data => response.json({ data: data }))
         .catch(err => console.log(err));
-})
+});
+
+//delete
+
+app.delete('/delete/:id', (request, response) => {
+    const { id } = request.params;
+    const db = dbService.getDbServiceInstance();
+
+    const result = db.deleteRowById(id);
+
+    result
+        .then(data => response.json({ success: data }))
+
+    .catch(err => console.log(err));
+});
 
 
 app.listen(process.env.PORT, () => console.log('app is running'));
