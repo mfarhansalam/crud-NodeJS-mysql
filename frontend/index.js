@@ -6,9 +6,12 @@ document.addEventListener('DOMContentLoaded', function() {
     loadHTMLTable([]);
 });
 
+//button
+const addBtn = document.querySelector('#addname');
+const updateBtn = document.querySelector('#update-row-btn');
 
 //insert
-const addBtn = document.querySelector('#addname');
+
 
 addBtn.onclick = function() {
     const nameInput = document.querySelector('#name-id');
@@ -56,7 +59,7 @@ function insertRowIntoTable(data) {
     }
 }
 
-//delete
+
 document.querySelector('table tbody').addEventListener('click', function(event) {
     if (event.target.className === "btn btn-danger") {
         deleteRowById(event.target.dataset.id);
@@ -65,7 +68,7 @@ document.querySelector('table tbody').addEventListener('click', function(event) 
         handleEditRow(event.target.dataset.id);
     }
 });
-
+//delete
 function deleteRowById(id) {
     fetch('http://localhost:5000/delete/' + id, {
             method: 'DELETE'
@@ -76,6 +79,36 @@ function deleteRowById(id) {
                 location.reload();
             }
         });
+}
+
+//update
+function handleEditRow(id) {
+    const updateSection = document.querySelector('#update-row');
+    updateSection.hidden = false;
+    document.querySelector('#update-row-btn').dataset.id = id;
+}
+
+updateBtn.onclick = function() {
+    const updateNameInput = document.querySelector('#update-name-input');
+
+
+    console.log(updateNameInput);
+    fetch('http://localhost:5000/update', {
+            method: 'PATCH',
+            headers: {
+                'Content-type': 'application/json'
+            },
+            body: JSON.stringify({
+                id: updateNameInput.dataset.id,
+                name: updateNameInput.value
+            })
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                location.reload();
+            }
+        })
 }
 
 
